@@ -1,0 +1,30 @@
+1.常见集合：ArrayList、LinkedList、TreeSet、HashSet、HashMap
+
+2.线程安全的集合：java.util.concurrent包提供的都是线程安全的、Vector、HashTable
+
+3.HashMap的实现原理：再jdk1.7之前底层数据结构是数组 + 链表，JDK1.8之后数据结构为数组 + 链表/红黑树（链表长度超过8并且数组长度超过64就会进行切换，在数量小于6时红黑树又会切换到链表）
+	为什么不用平衡二叉树（AVL树）：AVL树会触发大量的旋转操作来保证树的高度平衡，而HashMap中链表转成树的概率本身就不高使用AVL树完全不划算，而且红黑树的只要保证黑色高度平衡这样就减少了旋转的次数因此效率更高
+	
+	HashMap的扩容机制：默认的负载因子为0.75看，当元素个数超过75%时会触发扩容机制
+		1.将哈希表的长度扩展为原来的2倍
+		2.将旧的hash表的数据放入新的hash表的中
+	HashMap的大小为2的n次方
+	HashMap的初始容量大小为16
+	
+	ConcurrentHashMap（线程安全）底层原理：JDK1.7，使用大数组Segment（可重入锁）和小数组HashEntry实现底层结构：数组+链表，JDK1.8，添加元素时如果容器为空那么则使用volatile+CAS进行加锁，容器不为空那么用synchronized加锁，底层数据结构为数组+链表/红黑树
+	
+	HashTable：底层数据结构：数据+链表，通过Synchronized保证线程安全
+	
+Set集合：通过hashCode去查找位置，再通过equals判断是否有相同的元素
+
+4.数组转List：调用Arrays.asList()方法（数组和List指向的都是同一个内存地址）
+  LIst转数组：List.toArrays()方法里面new一个数组并指定长度；例如：new String[list.size()]（对原来元素的拷贝）
+
+5.ArrayList和LinkedList的区别：
+
+6.HashMap：
+	HashMap的put方法的流程：
+	HashMap的扩容机制：
+	HashMap的数组长度为什么一定是2的次幂？
+		1.计算索引效率更高，利用位的与运算代替取模运算
+7.扩容时计算索引效率更高：hash（链表节点的hash值） & oldCap（老容量）== 0的话元素留在老位置，否则新位置 = 旧位置 + oldCap
